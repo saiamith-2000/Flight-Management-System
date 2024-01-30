@@ -1,0 +1,50 @@
+version: "3"
+networks:
+  micro-net:
+    driver: bridge
+volumes:
+  api-gateway-node-modules:
+  flight-booking-service-modules:
+  flights-modules:
+  notification-service-modules:
+  rabbitmq-data:
+services:
+  api-gateway:
+    build: ./API-Gateway
+    networks:
+      - micro-net
+    ports:
+      - "3001:3001"
+    labels:
+      kompose.service.type: LoadBalancer
+    image: saiamith/containerised-microservices-api-gateway
+  notification-service:
+    build: ./Notification-Service
+    networks:
+      - micro-net
+    ports:
+      - "3002:3002"
+    labels:
+      kompose.service.type: LoadBalancer
+    image: saiamith/containerised-microservices-notification-service
+  flights-service:
+    build: ./Flights
+    networks:
+      - micro-net
+    ports: 
+      - "3000:3000"
+    labels:
+      kompose.service.type: LoadBalancer
+    image: saiamith/containerised-microservices-flights-service 
+  booking-service:
+    build: ./Flight-Booking-Service
+    networks:
+      - micro-net
+    ports:
+      - "4000:4000"
+    labels:
+      kompose.service.type: LoadBalancer
+    image: saiamith/containerised-microservices-booking-service
+
+    
+# docker compose up -d // run all containers in detached mode kind of like -dit
